@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+main
 from flask_login import login_required, current_user
 from .models import Task
 from . import db
@@ -59,6 +60,26 @@ def add_task():
     title = request.form['title']
     task = Task(user_id=current_user.id, title=title)
     db.session.add(task)
+    db.session.commit()
+    return redirect(url_for('main.dashboard'))
+
+@main_bp.route('/toggle_task/<int:task_id>')
+@login_required
+def toggle_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.user_id != current_user.id:
+        abort(403)
+    task.toggle()
+    db.session.commit()
+    return redirect(url_for('main.dashboard'))
+
+@main_bp.route('/delete_task/<int:task_id>')
+@login_required
+def delete_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.user_id != current_user.id:
+        abort(403)
+    task.delete()
     db.session.commit()
     return redirect(url_for('main.dashboard'))
 

@@ -7,7 +7,11 @@
 </form>
 <ul>
 {% for task in tasks %}
-    <li>{{ task.title }}</li>
+    <li>
+        {{ task.title }} - {% if task.completed %}Complete{% else %}Incomplete{% endif %}
+        <a href="{{ url_for('main.toggle_task', task_id=task.id) }}">Toggle</a>
+        <a href="{{ url_for('main.delete_task', task_id=task.id) }}">Delete</a>
+    </li>
 {% else %}
     <li>No tasks</li>
 {% endfor %}

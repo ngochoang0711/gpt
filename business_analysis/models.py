@@ -24,3 +24,11 @@ class Task(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
     title = db.Column(db.String(100))
     completed = db.Column(db.Boolean, default=False)
+
+    def toggle(self):
+        """Flip the completion state of the task."""
+        self.completed = not self.completed
+
+    def delete(self):
+        """Remove the task from the session."""
+        db.session.delete(self)
