@@ -54,6 +54,8 @@ def test_task_toggle_and_delete(client, app):
 
     with app.app_context():
         assert models.Task.query.get(task_id) is None
+
+
 def test_ai_query_error(client):
     res = client.post('/ai_query', data={'query': 'hi'})
     assert res.status_code == 500
