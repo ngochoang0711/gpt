@@ -11,9 +11,17 @@ class User(db.Model, UserMixin):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text)
+    tasks = db.relationship('Task', backref='project', lazy=True)
+
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
     title = db.Column(db.String(100))
     completed = db.Column(db.Boolean, default=False)
 

@@ -13,6 +13,7 @@ def create_app(test_config=None):
         SECRET_KEY=os.environ.get('SECRET_KEY', 'dev'),
         SQLALCHEMY_DATABASE_URI='sqlite:///business_analysis.db',
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        GEMINI_API_KEY=os.environ.get('GEMINI_API_KEY'),
     )
     if test_config:
         app.config.update(test_config)
@@ -27,7 +28,9 @@ def create_app(test_config=None):
 
         from .auth import auth_bp
         from .main import main_bp
+        from .project import project_bp
         app.register_blueprint(auth_bp)
         app.register_blueprint(main_bp)
+        app.register_blueprint(project_bp)
 
         return app

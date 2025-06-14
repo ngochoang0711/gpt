@@ -18,6 +18,7 @@ def test_index(client):
     assert res.status_code == 200
 
 
+
 def signup(client, username="user", password="pass"):
     return client.post(
         "/auth/signup",
@@ -53,3 +54,8 @@ def test_task_toggle_and_delete(client, app):
 
     with app.app_context():
         assert models.Task.query.get(task_id) is None
+def test_ai_query_error(client):
+    res = client.post('/ai_query', data={'query': 'hi'})
+    assert res.status_code == 500
+    data = res.get_json()
+    assert 'error' in data
