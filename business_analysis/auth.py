@@ -9,28 +9,44 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
+
+        if not username or not password:
+            flash('Username and password are required.')
+            return render_template('login.html'), 400
+
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for('main.dashboard'))
-        flash('Invalid credentials')
+
+        flash('Invalid credentials.')
+        return render_template('login.html'), 400
+
     return render_template('login.html')
 
 @auth_bp.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username']
-        password = generate_password_hash(request.form['password'])
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
+
+        if not username or not password:
+            flash('Username and password are required.')
+            return render_template('signup.html'), 400
+
         if User.query.filter_by(username=username).first():
             flash('Username exists')
-        else:
-            user = User(username=username, password=password)
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            return redirect(url_for('main.dashboard'))
+            return render_template('signup.html'), 400
+
+        hashed = generate_password_hash(password)
+        user = User(username=username, password=hashed)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for('main.dashboard'))
+
     return render_template('signup.html')
 
 @auth_bp.route('/logout')
