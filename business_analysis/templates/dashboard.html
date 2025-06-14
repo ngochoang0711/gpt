@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Dashboard</h2>
+<form method="post" action="{{ url_for('main.add_task') }}">
+    <input name="title" placeholder="New Task" required>
+    <button type="submit">Add</button>
+</form>
+<ul>
+{% for task in tasks %}
+    <li>{{ task.title }}</li>
+{% else %}
+    <li>No tasks</li>
+{% endfor %}
+</ul>
+<a href="{{ url_for('main.templates') }}">Template Library</a>
+{% endblock %}

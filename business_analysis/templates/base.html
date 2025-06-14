@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BusinessAnalysis.io</title>
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    Logged in as {{ current_user.username }} | <a href="{{ url_for('auth.logout') }}">Logout</a>
+    {% endif %}
+    <hr>
+    {% block content %}{% endblock %}
+</body>
+</html>

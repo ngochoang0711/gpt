@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Stakeholder Analysis",
+        "description": "Template for identifying stakeholders and interests"
+    },
+    {
+        "name": "User Story",
+        "description": "As a <role>, I want <feature> so that <benefit>"
+    },
+    {
+        "name": "Change Request",
+        "description": "Form to request changes in scope or requirements"
+    }
+]
