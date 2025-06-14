@@ -15,3 +15,10 @@ def client(app):
 def test_index(client):
     res = client.get('/')
     assert res.status_code == 200
+
+
+def test_ai_query_error(client):
+    res = client.post('/ai_query', data={'query': 'hi'})
+    assert res.status_code == 500
+    data = res.get_json()
+    assert 'error' in data
