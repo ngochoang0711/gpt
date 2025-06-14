@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ 'Edit' if project else 'New' }} Project</h2>
+<form method="post">
+    <input name="name" placeholder="Name" value="{{ project.name if project else '' }}" required>
+    <br>
+    <textarea name="description" placeholder="Description">{{ project.description if project else '' }}</textarea>
+    <br>
+    <button type="submit">Save</button>
+</form>
+<a href="{{ url_for('projects.list_projects') }}">Back to Projects</a>
+{% endblock %}
