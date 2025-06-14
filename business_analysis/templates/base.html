@@ -8,6 +8,15 @@
     Logged in as {{ current_user.username }} | <a href="{{ url_for('auth.logout') }}">Logout</a>
     {% endif %}
     <hr>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     {% block content %}{% endblock %}
 </body>
 </html>
