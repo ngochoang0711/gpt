@@ -27,7 +27,9 @@ def create_app(test_config=None):
 
         from .auth import auth_bp
         from .main import main_bp
+        from .project import project_bp
         app.register_blueprint(auth_bp)
         app.register_blueprint(main_bp)
+        app.register_blueprint(project_bp)
 
         return app
