@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, current_app
 from flask_login import login_required, current_user
 from .models import Task
 from . import db
 import json
+import requests
 
 main_bp = Blueprint('main', __name__)
 
@@ -11,9 +12,31 @@ with open('business_analysis/data/templates.json') as f:
     TEMPLATES = json.load(f)
 
 
-def fake_ai_response(query):
-    # Placeholder for AI integration
-    return f"AI Assistant response to: {query}"
+def gemini_ai_response(query):
+    """Call the Gemini API with the provided query string."""
+    api_key = current_app.config.get("GEMINI_API_KEY")
+    if not api_key:
+        return None, "GEMINI_API_KEY not configured"
+
+    endpoint = (
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+    )
+    params = {"key": api_key}
+    payload = {"contents": [{"parts": [{"text": query}]}]}
+
+    try:
+        resp = requests.post(endpoint, params=params, json=payload, timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+        answer = (
+            data.get("candidates", [{}])[0]
+            .get("content", {})
+            .get("parts", [{}])[0]
+            .get("text")
+        )
+        return answer, None
+    except Exception:
+        return None, "Failed to fetch response"
 
 @main_bp.route('/')
 def index():
@@ -43,5 +66,7 @@ def add_task():
 @login_required
 def ai_query():
     query = request.form['query']
-    answer = fake_ai_response(query)
+    answer, error = gemini_ai_response(query)
+    if error:
+        return jsonify({'error': error}), 500
     return jsonify({'answer': answer})

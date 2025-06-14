@@ -15,6 +15,8 @@ pip install -r requirements.txt
 python run.py
 ```
 
+Set the `GEMINI_API_KEY` environment variable to enable the AI assistant.
+
 Run tests:
 ```bash
 pytest
