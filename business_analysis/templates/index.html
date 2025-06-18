@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Welcome to BusinessAnalysis.io</h1>
-<a href="{{ url_for('auth.login') }}">Login</a> or <a href="{{ url_for('auth.signup') }}">Sign Up</a>
+<h1>BusinessAnalysis.io</h1>
+<p>
+  Harness the power of <strong>AI Agent as a Service</strong> to streamline your
+  business analysis workflow. Sign up to access automated templates, project
+  management tools and an integrated AI assistant that answers your questions in
+  real time.
+</p>
+<p>
+  <a href="{{ url_for('auth.login') }}">Login</a> or
+  <a href="{{ url_for('auth.signup') }}">Sign Up</a>
+  to get started.
+</p>
 {% endblock %}
